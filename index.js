@@ -18,11 +18,11 @@ bot.on("message", function (event) {
     const introRegex = /你|誰|介紹|you|yourself|hello|你好|hi/gi;
     const resumeRegex = /resume|說明|cv/gi;
     const userText = event.message.text;
-    if (introRegex.text(userText)) {
+    if (introRegex.test(userText)) {
         event.reply(
             "你好！"
         );
-    } else if (resumeRegex.text(userText)) {
+    } else if (resumeRegex.test(userText)) {
         event.reply(
             "說明文件"
         );
