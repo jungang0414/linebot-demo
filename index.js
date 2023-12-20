@@ -1,10 +1,15 @@
 const express = require("express");
 const app = express();
 //導入OpenAi
-const { OpenAiApi, Configuration } = require("openai");
-const openai = new OpenAiApi(new Configuration({
-    apiKey: process.env.apiKey,
-}));
+const openai = require("openai");
+
+// 設置OpenAI的配置
+const configuration = new openai.Configuration({
+    openAiApiKey: process.env.openAiApiKey, // 確保您已將API密鑰保存在環境變量中
+});
+
+const openaiClient = new openai.OpenAI(configuration);
+
 
 //引用linebot SDK
 var linebot = require("linebot");
@@ -39,7 +44,7 @@ bot.on("message", async function (event) {
 
     //GPT
     try {
-        const response = await openai.createCompletion({
+        const response = await openaiClient.createCompletion({
             model: "gpt-3.5-turbo",
             prompt: event.message.text,
             max_tokens: 50,
