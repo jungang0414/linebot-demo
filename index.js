@@ -1,5 +1,10 @@
 const express = require("express");
 const app = express();
+//導入OpenAi
+const { OpenAiApi, Configuration } = require("openai");
+const openai = new OpenAiApi(new Configuration({
+    apiKey: process.env.openaiapikey,
+}));
 
 //引用linebot SDK
 var linebot = require("linebot");
@@ -13,7 +18,7 @@ var bot = linebot({
 const linebotParser = bot.parser();
 
 //傳送訊息給bot
-bot.on("message", function (event) {
+bot.on("message", async function (event) {
     //event.message.text使用者傳送給bot的訊息
     const introRegex = /你|誰|介紹|you|yourself|hello|你好|hi/gi;
     const resumeRegex = /resume|說明|cv/gi;
@@ -31,6 +36,22 @@ bot.on("message", function (event) {
             "輸入以下關鍵字! \n\n介紹/說明"
         );
     }
+
+    //GPT
+    try {
+        const response = await openai.createCompletion({
+            model: "gpt-3.5-turbo",
+            prompt: event.message.text,
+            max_tokens: 50,
+            temperature: 0.2,
+        });
+
+        const gptResponse = response.data.choices[0].text.trim();
+        event.reply(gptResponse);
+    } catch (error) {
+        console.error("錯誤:", error);
+        event.reply("無法處理您的請求");
+    }
 });
 
 //POST
@@ -40,3 +61,5 @@ app.post("/", linebotParser);
 app.listen(process.env.PORT || 3000, () => {
     console.log("Express server start");
 });
+
+
