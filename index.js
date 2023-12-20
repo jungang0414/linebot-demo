@@ -3,7 +3,7 @@ const app = express();
 //導入OpenAi
 const { OpenAiApi, Configuration } = require("openai");
 const openai = new OpenAiApi(new Configuration({
-    apiKey: process.env.openaiapikey,
+    apiKey: process.env.apiKey,
 }));
 
 //引用linebot SDK
@@ -20,22 +20,22 @@ const linebotParser = bot.parser();
 //傳送訊息給bot
 bot.on("message", async function (event) {
     //event.message.text使用者傳送給bot的訊息
-    const introRegex = /你|誰|介紹|you|yourself|hello|你好|hi/gi;
-    const resumeRegex = /resume|說明|cv/gi;
-    const userText = event.message.text;
-    if (introRegex.test(userText)) {
-        event.reply(
-            "你好！"
-        );
-    } else if (resumeRegex.test(userText)) {
-        event.reply(
-            "說明文件"
-        );
-    } else {
-        event.reply(
-            "輸入以下關鍵字! \n\n介紹/說明"
-        );
-    }
+    // const introRegex = /你|誰|介紹|you|yourself|hello|你好|hi/gi;
+    // const resumeRegex = /resume|說明|cv/gi;
+    // const userText = event.message.text;
+    // if (introRegex.test(userText)) {
+    //     event.reply(
+    //         "你好！"
+    //     );
+    // } else if (resumeRegex.test(userText)) {
+    //     event.reply(
+    //         "說明文件"
+    //     );
+    // } else {
+    //     event.reply(
+    //         "輸入以下關鍵字! \n\n介紹/說明"
+    //     );
+    // }
 
     //GPT
     try {
